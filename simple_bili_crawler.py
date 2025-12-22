@@ -56,6 +56,7 @@ with requests.Session() as session:
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
         'Cookie': cookies_str,
+        'Referer': 'https://www.bilibili.com/',
         'csrf': bili_jct,
     }
     url_long = 'https://api.bilibili.com/x/v2/reply/main'
@@ -250,6 +251,7 @@ with requests.Session() as session:
                     time.sleep(RETRY_INTERVAL)
                 else:
                     raise
+
 
 
 
