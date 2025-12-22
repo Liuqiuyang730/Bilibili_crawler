@@ -10,7 +10,7 @@ import datetime
 from fake_useragent import UserAgent
 import random
 import sys
-from bv2oid import bv2av
+from bv2oid import bv2av, av2bv
 from Bilibili_crawler import clean_filename
 
 with open('config.json', 'r', encoding='utf-8') as f:
@@ -273,6 +273,7 @@ with requests.Session() as session:
                     time.sleep(RETRY_INTERVAL)
                 else:
                     raise
+
 
 
 
