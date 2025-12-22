@@ -66,7 +66,7 @@ jobs:
       uses: softprops/action-gh-release@v2.1.0
       with:
         tag_name: Comments
-        files: ${{ github.workspace }}/comments/*
+        files: ${{ github.workspace }}/comments/*.csv
         token: ${{ secrets.GITHUB_TOKEN }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
