@@ -11,9 +11,14 @@ on:
         required: true
         default: 'BV1nhySBHHEvz,BV1Ny8BqEx3'
       bv_type:
-        description: '请填写类型，1表示视频评论，11表示图文动态评论，17表示转发、文字动态评论'
+        description: '请选择评论类型'
         required: true
-        default: '1'
+        default: '视频评论'
+        type: choice
+        options:
+          - 视频评论
+          - 图文动态评论
+          - 转发/文字动态评论
 
 permissions:
   contents: write
@@ -42,12 +47,35 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Python
       run: |
+        # 获取用户选择的文字类型
+        SELECTED_TYPE="${{ github.event.inputs.bv_type }}"
+        
+        # 文字到数字的映射
+        case "$SELECTED_TYPE" in
+          "视频评论")
+            BV_TYPE="1"
+            TYPE_DESC="视频评论"
+            ;;
+          "图文动态评论")
+            BV_TYPE="11"
+            TYPE_DESC="图文动态评论"
+            ;;
+          "转发/文字动态评论")
+            BV_TYPE="17"
+            TYPE_DESC="转发/文字动态评论"
+            ;;
+          *)
+            echo "错误: 未知的评论类型: $SELECTED_TYPE"
+            exit 1
+            ;;
+        esac
+        
         IFS=',' read -ra BV_ARRAY <<< "${{ github.event.inputs.bv_ids }}"        
         for i in "${!BV_ARRAY[@]}"; do
           bv_id="${BV_ARRAY[$i]// /}"  # 去除空格
-          echo "处理第 $((i+1)) 个视频: $bv_id 类型: $github.event.inputs.bv_type" 
+          echo "处理第 $((i+1)) 个视频: $bv_id 类型: $BV_TYPE" 
           
-          python simple_bili_crawler.py "$bv_id" "${{ github.event.inputs.bv_type }}"
+          python simple_bili_crawler.py "$bv_id" "$BV_TYPE"
           
           # 如果不是最后一个，休眠2分钟
           if [ $i -lt $((${#BV_ARRAY[@]} - 1)) ]; then
