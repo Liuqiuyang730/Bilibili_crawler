@@ -4,10 +4,12 @@
 name: Python application
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      docker_images:
+        description: '请填写视频BV号'
+        required: true
+        default: 'BV1nhySBHHEvz'
 
 permissions:
   contents: read
@@ -36,4 +38,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Python
       run: |
-        python simple_bili_crawler.py
+        # python simple_bili_crawler.py
+         echo "当前目录内容:"
+         ls -la
