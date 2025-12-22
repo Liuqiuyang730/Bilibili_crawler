@@ -26,7 +26,7 @@ with open('config.json', 'r', encoding='utf-8') as f:
     bili_jct = config['bili_jct']
 if len(sys.argv) > 1:
     oid = bv2av(sys.argv[1])
-    type = sys.argv[2]
+    type = int(sys.argv[2])
     file_path_3 = f"comments/{oid}_3.csv"
     
 # 重试次数限制
@@ -250,5 +250,6 @@ with requests.Session() as session:
                     time.sleep(RETRY_INTERVAL)
                 else:
                     raise
+
 
 
